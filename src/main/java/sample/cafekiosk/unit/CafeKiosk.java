@@ -30,7 +30,6 @@ public class CafeKiosk {
         }
     }
 
-
     public void remove(Beverage beverage) {
         beverages.remove(beverage);
     }
@@ -63,7 +62,6 @@ public class CafeKiosk {
 
         return new Order(currentDateTime, beverages);
     }
-
 
 
 }
