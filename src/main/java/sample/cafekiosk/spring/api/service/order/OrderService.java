@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
+import sample.cafekiosk.spring.api.service.order.request.OrderCreateServiceRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.Order;
 import sample.cafekiosk.spring.domain.order.OrderRepository;
@@ -34,7 +34,7 @@ public class OrderService {
      * 재고 감소 -> 동시성 고민
      * optimistic lock / pessimistic lock / ...
      */
-    public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime registeredDateTime) {
+    public OrderResponse createOrder(OrderCreateServiceRequest request, LocalDateTime registeredDateTime) {
         List<String> productNumbers = request.getProductNumbers();
         List<Product> products = findProductsBy(productNumbers);
 
@@ -69,27 +69,27 @@ public class OrderService {
     private List<Product> findProductsBy(List<String> productNumbers) {
         List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
         Map<String, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getProductNumber, product -> product));
+            .collect(Collectors.toMap(Product::getProductNumber, product -> product));
         return productNumbers.stream()
-                .map(productMap::get)
-                .collect(Collectors.toList());
+            .map(productMap::get)
+            .collect(Collectors.toList());
     }
 
     private static List<String> extractStockProductNumbers(List<Product> products) {
         return products.stream()
-                .filter(product -> ProductType.containsStockType(product.getType()))
-                .map(Product::getProductNumber)
-                .collect(Collectors.toList());
+            .filter(product -> ProductType.containsStockType(product.getType()))
+            .map(Product::getProductNumber)
+            .collect(Collectors.toList());
     }
 
     private Map<String, Stock> createStockMapBy(List<String> stockProductNumbers) {
         List<Stock> stocks = stockRepository.findAllByProductNumberIn(stockProductNumbers);
         return stocks.stream()
-                .collect(Collectors.toMap(Stock::getProductNumber, s -> s));
+            .collect(Collectors.toMap(Stock::getProductNumber, s -> s));
     }
 
     private static Map<String, Long> createCountingMapBy(List<String> stockProductNumbers) {
         return stockProductNumbers.stream()
-                .collect(Collectors.groupingBy(productNumber -> productNumber, Collectors.counting()));
+            .collect(Collectors.groupingBy(productNumber -> productNumber, Collectors.counting()));
     }
 }

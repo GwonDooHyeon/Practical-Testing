@@ -3,7 +3,7 @@ package sample.cafekiosk.spring.api.service.product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sample.cafekiosk.spring.api.controller.product.dto.request.ProductCreateRequest;
+import sample.cafekiosk.spring.api.service.product.request.ProductCreateServiceRequest;
 import sample.cafekiosk.spring.api.service.product.response.ProductResponse;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductRepository;
@@ -31,7 +31,7 @@ public class ProductService {
     // 1. 3번 시도 - 중요도가 높지 않은 경우
     // 2. 유니크 인덱스를 부여해 정책을 uuid로 변경 - 중요도가 높은 경우
     @Transactional
-    public ProductResponse createProduct(ProductCreateRequest request) {
+    public ProductResponse createProduct(ProductCreateServiceRequest request) {
         String nextProductNumber = createNextProductNumber();
 
         Product product = request.toEntity(nextProductNumber);
@@ -56,7 +56,7 @@ public class ProductService {
         // 판매중, 판매보류 상품이 판매 목록 상품이다.
         List<Product> products = productRepository.findAllBySellingStatusIn(forDisplay());
         return products.stream()
-                .map(ProductResponse::of)
-                .collect(Collectors.toList());
+            .map(ProductResponse::of)
+            .collect(Collectors.toList());
     }
 }
