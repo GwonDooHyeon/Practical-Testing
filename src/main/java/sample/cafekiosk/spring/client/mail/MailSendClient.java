@@ -12,4 +12,16 @@ public class MailSendClient {
         throw new IllegalArgumentException("메일 전송에 실패하였습니다.");
 //        return true;
     }
+
+    public void a() {
+        log.info("a");
+    }
+
+    public void b() {
+        log.info("b");
+    }
+
+    public void c() {
+        log.info("c");
+    }
 }
