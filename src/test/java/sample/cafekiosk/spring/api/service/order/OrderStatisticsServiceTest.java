@@ -4,9 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import sample.cafekiosk.spring.client.mail.MailSendClient;
+import sample.cafekiosk.IntegrationTestSupport;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistory;
 import sample.cafekiosk.spring.domain.history.mail.MailSendHistoryRepository;
 import sample.cafekiosk.spring.domain.order.Order;
@@ -27,8 +25,7 @@ import static org.mockito.Mockito.when;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
-@SpringBootTest
-class OrderStatisticsServiceTest {
+class OrderStatisticsServiceTest extends IntegrationTestSupport {
 
     @Autowired
     OrderStatisticsService orderStatisticsService;
@@ -44,9 +41,6 @@ class OrderStatisticsServiceTest {
 
     @Autowired
     MailSendHistoryRepository mailSendHistoryRepository;
-
-    @MockBean
-    MailSendClient mailSendClient;
 
     @AfterEach
     void tearDown() {
@@ -84,27 +78,27 @@ class OrderStatisticsServiceTest {
 
         List<MailSendHistory> histories = mailSendHistoryRepository.findAll();
         assertThat(histories).hasSize(1)
-                .extracting("content")
-                .contains("총 매출 합계는 12000원입니다.");
+            .extracting("content")
+            .contains("총 매출 합계는 12000원입니다.");
     }
 
     private Order createPaymentCompletedOrder(List<Product> products, LocalDateTime now) {
         Order order = Order
-                .builder()
-                .products(products)
-                .orderStatus(OrderStatus.PAYMENT_COMPLETED)
-                .registeredDateTime(now)
-                .build();
+            .builder()
+            .products(products)
+            .orderStatus(OrderStatus.PAYMENT_COMPLETED)
+            .registeredDateTime(now)
+            .build();
         return orderRepository.save(order);
     }
 
     private Product createProduct(ProductType type, String productNumber, int price) {
         return Product.builder()
-                .type(type)
-                .productNumber(productNumber)
-                .price(price)
-                .sellingStatus(SELLING)
-                .name("메뉴 이름")
-                .build();
+            .type(type)
+            .productNumber(productNumber)
+            .price(price)
+            .sellingStatus(SELLING)
+            .name("메뉴 이름")
+            .build();
     }
 }

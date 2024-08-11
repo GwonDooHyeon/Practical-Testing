@@ -2,7 +2,6 @@ package sample.cafekiosk.spring.domain.order;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import sample.cafekiosk.spring.domain.product.Product;
 
 import java.time.LocalDateTime;
@@ -13,7 +12,6 @@ import static sample.cafekiosk.spring.domain.order.OrderStatus.INIT;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
-@SpringBootTest
 class OrderTest {
 
     @DisplayName("주문 생성시 상품 리스트에서 주문의 총 금액을 계산한다.")
@@ -21,8 +19,8 @@ class OrderTest {
     void calculateTotalPrice() throws Exception {
         // given
         List<Product> products = List.of(
-                createProduct("001", 1000),
-                createProduct("002", 2000));
+            createProduct("001", 1000),
+            createProduct("002", 2000));
 
         // when
         Order order = Order.create(products, LocalDateTime.now());
@@ -36,8 +34,8 @@ class OrderTest {
     void init() throws Exception {
         // given
         List<Product> products = List.of(
-                createProduct("001", 1000),
-                createProduct("002", 2000));
+            createProduct("001", 1000),
+            createProduct("002", 2000));
 
         // when
         Order order = Order.create(products, LocalDateTime.now());
@@ -52,8 +50,8 @@ class OrderTest {
         // given
         LocalDateTime registeredDateTime = LocalDateTime.now();
         List<Product> products = List.of(
-                createProduct("001", 1000),
-                createProduct("002", 2000));
+            createProduct("001", 1000),
+            createProduct("002", 2000));
 
         // when
 
@@ -65,12 +63,12 @@ class OrderTest {
 
     private Product createProduct(String productNumber, int price) {
         return Product.builder()
-                .type(HANDMADE)
-                .productNumber(productNumber)
-                .price(price)
-                .sellingStatus(SELLING)
-                .name("메뉴 이름")
-                .build();
+            .type(HANDMADE)
+            .productNumber(productNumber)
+            .price(price)
+            .sellingStatus(SELLING)
+            .name("메뉴 이름")
+            .build();
     }
 
 }

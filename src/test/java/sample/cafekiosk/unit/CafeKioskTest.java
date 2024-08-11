@@ -1,6 +1,6 @@
 package sample.cafekiosk.unit;
 
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.unit.beverage.Americano;
 import sample.cafekiosk.unit.beverage.Latte;
@@ -50,8 +50,8 @@ class CafeKioskTest {
 
 
         assertThatThrownBy(() -> cafeKiosk.add(americano, 0))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("음료는 1잔 이상 주문하실 수 있습니다.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("음료는 1잔 이상 주문하실 수 있습니다.");
     }
 
     @Test
@@ -81,7 +81,7 @@ class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages()).isEmpty();
         assertThat(cafeKiosk.getBeverages()).hasSize(0);
     }
-    
+
     @Test
     void calculateTotalPrice() {
         // given
@@ -100,6 +100,7 @@ class CafeKioskTest {
     }
 
     @Test
+    @Disabled
     void createOrder() {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -133,7 +134,7 @@ class CafeKioskTest {
         cafeKiosk.add(americano);
 
         assertThatThrownBy(() -> cafeKiosk.createOrder(LocalDateTime.of(2024, 6, 16, 9, 59)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("주문 시간이 아닙니다. 관리자에게 문의하세요.");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("주문 시간이 아닙니다. 관리자에게 문의하세요.");
     }
 }

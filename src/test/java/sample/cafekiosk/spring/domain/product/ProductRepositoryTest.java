@@ -3,8 +3,8 @@ package sample.cafekiosk.spring.domain.product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+import sample.cafekiosk.IntegrationTestSupport;
 
 import java.util.List;
 
@@ -13,10 +13,8 @@ import static org.assertj.core.groups.Tuple.tuple;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.*;
 import static sample.cafekiosk.spring.domain.product.ProductType.HANDMADE;
 
-@ActiveProfiles("test")
-//@SpringBootTest
-@DataJpaTest
-class ProductRepositoryTest {
+@Transactional
+class ProductRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private ProductRepository productRepository;
@@ -35,11 +33,11 @@ class ProductRepositoryTest {
 
         // then
         assertThat(products).hasSize(2)
-                .extracting("productNumber", "name", "price")
-                .containsExactlyInAnyOrder(
-                        tuple("002", "카페라떼", 4500),
-                        tuple("001", "아메리카노", 4000)
-                );
+            .extracting("productNumber", "name", "price")
+            .containsExactlyInAnyOrder(
+                tuple("002", "카페라떼", 4500),
+                tuple("001", "아메리카노", 4000)
+            );
     }
 
     @DisplayName("상품번호 리스트로 상품들을 조회한다.")
@@ -56,11 +54,11 @@ class ProductRepositoryTest {
 
         // then
         assertThat(products).hasSize(2)
-                .extracting("productNumber", "name", "price")
-                .containsExactlyInAnyOrder(
-                        tuple("002", "카페라떼", 4500),
-                        tuple("001", "아메리카노", 4000)
-                );
+            .extracting("productNumber", "name", "price")
+            .containsExactlyInAnyOrder(
+                tuple("002", "카페라떼", 4500),
+                tuple("001", "아메리카노", 4000)
+            );
     }
 
     @DisplayName("가장 마지막으로 저장한 상품의 상품번호를 읽어온다.")
@@ -84,7 +82,7 @@ class ProductRepositoryTest {
     @DisplayName("가장 마지막으로 저장한 상품의 상품번호를 읽어올 때, 상품이 없는 경우 null을 반환한다.")
     @Test
     void findLatestProductNumberWhenProductIsEmpty
-            () throws Exception {
+        () throws Exception {
         // when
         String latestProductNumber = productRepository.findLatestProductNumber();
 
@@ -94,11 +92,11 @@ class ProductRepositoryTest {
 
     private Product createProduct(String productNumber, ProductType type, ProductSellingStatus sellingStatus, String name, int price) {
         return Product.builder()
-                .productNumber(productNumber)
-                .type(type)
-                .sellingStatus(sellingStatus)
-                .name(name)
-                .price(price)
-                .build();
+            .productNumber(productNumber)
+            .type(type)
+            .sellingStatus(sellingStatus)
+            .name(name)
+            .price(price)
+            .build();
     }
 }

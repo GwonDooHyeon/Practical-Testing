@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
 class StockTest {
 
     @DisplayName("재고의 수량이 제공된 수량보다 작은지 확인한다.")
@@ -54,19 +52,6 @@ class StockTest {
         assertThatThrownBy(() -> stock.deductQuantity(quantity))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("차감할 재고 수량이 없습니다.");
-    }
-
-    @DisplayName("")
-    @TestFactory
-    Collection<DynamicTest> dynamicTest() {
-        return List.of(
-            DynamicTest.dynamicTest("", () -> {
-
-            }),
-            DynamicTest.dynamicTest("", () -> {
-
-            })
-        );
     }
 
     @DisplayName("재고 차감 시나리오")
