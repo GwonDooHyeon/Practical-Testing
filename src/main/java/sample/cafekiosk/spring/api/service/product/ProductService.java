@@ -26,30 +26,19 @@ import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.forDis
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductNumberFactory productNumberFactory;
 
     // 동시성 이슈 - ExecutorService를 통해 스레드풀 생성 후 동시성 테스트 가능
     // 1. 3번 시도 - 중요도가 높지 않은 경우
     // 2. 유니크 인덱스를 부여해 정책을 uuid로 변경 - 중요도가 높은 경우
     @Transactional
     public ProductResponse createProduct(ProductCreateServiceRequest request) {
-        String nextProductNumber = createNextProductNumber();
+        String nextProductNumber = productNumberFactory.createNextProductNumber();
 
         Product product = request.toEntity(nextProductNumber);
         Product savedProduct = productRepository.save(product);
 
         return ProductResponse.of(savedProduct);
-    }
-
-    private String createNextProductNumber() {
-        String latestProductNumber = productRepository.findLatestProductNumber();
-        if (latestProductNumber == null) {
-            return "001";
-        }
-
-        int latestProductNumberInt = Integer.parseInt(latestProductNumber);
-        int nextProductNumberInt = latestProductNumberInt + 1;
-
-        return "%03d".formatted(nextProductNumberInt);
     }
 
     public List<ProductResponse> getSellingProducts() {
